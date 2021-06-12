@@ -128,7 +128,7 @@ public class Partida {
     public int getVidas() {
         return vidas;
     }
-    public int getfallos() {
+    public int getFallos() {
     	return fallos;
     }
 

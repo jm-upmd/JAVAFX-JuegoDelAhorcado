@@ -16,9 +16,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventDispatchChain;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -124,7 +128,7 @@ public class InterfaceController {
 		palabraOculta.setText(partida.getPalabraCandidataEspaciada());
 		prAciertos.setValue(partida.getAciertos());
 		prVidas.setValue(partida.getVidas());
-		prFallos.setValue(partida.getfallos());
+		prFallos.setValue(partida.getFallos());
 		prPartidaEnCurso.setValue(true);
 		prPerdida.setValue(false);
 		prTiempo.setValue(formatoHora(segundo));
@@ -156,22 +160,28 @@ public class InterfaceController {
 		} else {
 
 			// Act. cont. fallos y vidas
-			prFallos.setValue(partida.getfallos());
+			prFallos.setValue(partida.getFallos());
 			prVidas.setValue(partida.getVidas());
 			// Act. imagen horca
-			imageView.setImage(imagenesHorcas[partida.getfallos()]);
+			imageView.setImage(imagenesHorcas[partida.getFallos()]);
 		}
 
 		// Verifica si la partida ha terminado
 		int terminar = partida.terminada();
+		String mensaje;
 
 		if (terminar != Partida.NO_TERMINADA) { // Si partida terminada
 			prPartidaEnCurso.setValue(false);
 			actualizaBotonera(); // Actualiza botnes para nueva partida
 			timer.cancel(); // Para reloj
-			if (terminar == Partida.PERDIDA)
-				prPerdida.setValue(true);
 			pintaPalabra();
+			if (terminar == Partida.PERDIDA) {
+				prPerdida.setValue(true);
+				mensaje = "Oooooh, fallaste";
+			} else
+				mensaje = "¡Enhorabuena la has completado!";
+			new Alert(AlertType.NONE, mensaje,ButtonType.OK).showAndWait();
+			
 		}
 	}
 
