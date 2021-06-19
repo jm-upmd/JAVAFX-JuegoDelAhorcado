@@ -230,7 +230,7 @@ public class InterfaceController {
 
 		StringBuilder sb = new StringBuilder();
 
-		// Clase interna para guardar el trozo de palabra y su color
+		// Clase interna local  para guardar el trozo de palabra y su color
 		class TrozoPal {
 			String trozoString;
 			char color;
@@ -242,9 +242,10 @@ public class InterfaceController {
 		}
 
 		// Este array contendrá todos los trozos de palabras y el color con que
-		// pintarlos
-		// Ejemplo: Para la palabra incompleta: C _ R _ _ L L E R _
-		// Guardará {{"C ",'N'}, {"O ",'R'}, {"R ",'N'}, {"D I ",'R'}, {"L L E R ",'N'},
+		// pintarlos: 'N': negro; 'R': rojo.
+		
+		// Ejemplo: Para la palabra CORDILLERA incompleta: C _ R _ _ L L E R _
+		// trozos =  {{"C ",'N'}, {"O ",'R'}, {"R ",'N'}, {"D I ",'R'}, {"L L E R ",'N'},
 		// {"A","R"}}
 		ArrayList<TrozoPal> trozos = new ArrayList<>();
 
@@ -258,12 +259,12 @@ public class InterfaceController {
 
 		while (i < pKO.length()) {
 			if (estado == 1) {
-				if (pKO.charAt(i) != '_') {
+				if (pKO.charAt(i) != '_') {				// estado = 1 y caracter != '_'
 					trozos.add(new TrozoPal(sb.toString(), 'R'));
 					sb.setLength(0);
 					estado = 2;
 				}
-			} else if (pKO.charAt(i) == '_') {
+			} else if (pKO.charAt(i) == '_') {         // estado = 2 y caracter == '_'
 				trozos.add(new TrozoPal(sb.toString(), 'N'));
 				sb.setLength(0);
 				estado = 1;
@@ -271,8 +272,11 @@ public class InterfaceController {
 			sb.append(pOK.charAt(i)).append(" ");
 			i++;
 		}
-
-		trozos.add(new TrozoPal(sb.toString().substring(0, sb.length()), estado == 1 ? 'R' : 'N'));
+		
+		// Cogemos último trozo metido en el stringBuilder sin el 
+		// espacio del final.
+		
+		trozos.add(new TrozoPal(sb.toString().trim(), estado == 1 ? 'R' : 'N'));
 
 		// Va dando el estilo y color a cada trozo y metiendolo en el TextFlow
 		Text t;
