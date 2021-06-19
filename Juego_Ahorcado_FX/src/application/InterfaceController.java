@@ -174,7 +174,7 @@ public class InterfaceController {
 			prPartidaEnCurso.setValue(false);
 			actualizaBotonera(); // Actualiza botnes para nueva partida
 			timer.cancel(); // Para reloj
-			pintaPalabra();
+			PintaPalabraV2();
 			if (terminar == Partida.PERDIDA) {
 				prPerdida.setValue(true);
 				mensaje = "Oooooh, fallaste";
@@ -287,6 +287,23 @@ public class InterfaceController {
 			t.setFont(Font.font("System", FontWeight.BOLD, 36));
 			textFlow.getChildren().add(t);
 		}
+	}
+	
+	// Versión de PintaPalabra más simple de implementar pero genera un objeto Text
+	// por cada letra. Además hace concatenaciones de strings
+	void PintaPalabraV2() {
+		String pOK = partida.getPalabraOculta();    // CORDILLERA
+		String pKO = partida.getPalabraCandidata(); // C_R__LLER_
+		Text t;
+		int contLetras = pKO.length() - 1;
+		for (int i = 0; i <= contLetras; i++) {
+			String cOK = "" + pOK.charAt(i);
+			String cKO = "" + pKO.charAt(i);
+			t = new Text(cOK + (i < contLetras ? " " :"" )) ;
+			t.setFont(Font.font("System", FontWeight.BOLD, 36));
+			t.setFill(cKO.equals(cOK) ? Color.BLACK : Color.RED) ;
+			textFlow.getChildren().add(t);
+		}		
 	}
 
 	
