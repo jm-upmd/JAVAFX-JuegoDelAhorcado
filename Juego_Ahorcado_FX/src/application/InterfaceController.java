@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventDispatchChain;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -118,6 +119,7 @@ public class InterfaceController {
 				botonesLetra.put(b.getText(), b);
 			}
 		}
+		
 	}
 
 	private void partidaNueva() {
@@ -216,6 +218,8 @@ public class InterfaceController {
 			// botón.
 			botonLetra.fire();
 	}
+	
+	
 
 	/**
 	 * Pinta la palbra completa cuando se ha perdido la partida. Las letras no
@@ -291,6 +295,7 @@ public class InterfaceController {
 	
 	// Versión de PintaPalabra más simple de implementar pero genera un objeto Text
 	// por cada letra. Además hace concatenaciones de strings
+ 
 	void PintaPalabraV2() {
 		String pOK = partida.getPalabraOculta();    // CORDILLERA
 		String pKO = partida.getPalabraCandidata(); // C_R__LLER_
@@ -299,7 +304,12 @@ public class InterfaceController {
 		for (int i = 0; i <= contLetras; i++) {
 			String cOK = "" + pOK.charAt(i);
 			String cKO = "" + pKO.charAt(i);
-			t = new Text(cOK + (i < contLetras ? " " :"" )) ;
+			
+			if(i<contLetras) 
+				 t  = new Text( cOK + " ");
+			else 
+				t = new Text(cOK) ;
+			
 			t.setFont(Font.font("System", FontWeight.BOLD, 36));
 			t.setFill(cKO.equals(cOK) ? Color.BLACK : Color.RED) ;
 			textFlow.getChildren().add(t);
@@ -326,6 +336,7 @@ public class InterfaceController {
 			}
 		}, 0, intervaloTimer);
 	}
+	
 
 	String formatoHora(long n) {
 		long horas = 0, minutos = 0, segundos = 0;
@@ -347,7 +358,6 @@ public class InterfaceController {
 
 		}
 	}
-	
 
 	
 }  // fin class
