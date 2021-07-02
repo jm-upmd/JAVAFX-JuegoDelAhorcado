@@ -228,30 +228,10 @@ public class InterfaceController {
 	 */
 
 	private void pintaPalabra() {
-
 		String pOK = partida.getPalabraOculta();
 		String pKO = partida.getPalabraCandidata();
 
 		StringBuilder sb = new StringBuilder();
-
-		// Clase interna local  para guardar el trozo de palabra y su color
-		class TrozoPal {
-			String trozoString;
-			char color;
-
-			public TrozoPal(String trozoString, char color) {
-				this.trozoString = trozoString;
-				this.color = color; // 'N' negro; 'R' rojo
-			}
-		}
-
-		// Este array contendrá todos los trozos de palabras y el color con que
-		// pintarlos: 'N': negro; 'R': rojo.
-		
-		// Ejemplo: Para la palabra CORDILLERA incompleta: C _ R _ _ L L E R _
-		// trozos =  {{"C ",'N'}, {"O ",'R'}, {"R ",'N'}, {"D I ",'R'}, {"L L E R ",'N'},
-		// {"A","R"}}
-		ArrayList<TrozoPal> trozos = new ArrayList<>();
 
 		// Extracción de los trozos
 
@@ -263,13 +243,13 @@ public class InterfaceController {
 
 		while (i < pKO.length()) {
 			if (estado == 1) {
-				if (pKO.charAt(i) != '_') {				// estado = 1 y caracter != '_'
-					trozos.add(new TrozoPal(sb.toString(), 'R'));
+				if (pKO.charAt(i) != '_') {
+					textFlowMete(sb.toString(), 'R');
 					sb.setLength(0);
 					estado = 2;
 				}
-			} else if (pKO.charAt(i) == '_') {         // estado = 2 y caracter == '_'
-				trozos.add(new TrozoPal(sb.toString(), 'N'));
+			} else if (pKO.charAt(i) == '_') {
+				textFlowMete(sb.toString(), 'N');
 				sb.setLength(0);
 				estado = 1;
 			}
@@ -277,20 +257,17 @@ public class InterfaceController {
 			i++;
 		}
 		
-		// Cogemos último trozo metido en el stringBuilder sin el 
-		// espacio del final.
+		textFlowMete(sb.toString().substring(0, sb.length()), estado == 1 ? 'R' : 'N');
+	
+	}
+	
+	void textFlowMete(String texto, char color) {
 		
-		trozos.add(new TrozoPal(sb.toString().trim(), estado == 1 ? 'R' : 'N'));
-
-		// Va dando el estilo y color a cada trozo y metiendolo en el TextFlow
-		Text t;
-		for (TrozoPal p : trozos) {
-			t = new Text();
-			t.setText(p.trozoString);
-			t.setFill(p.color == 'R' ? Color.RED : Color.BLACK);
-			t.setFont(Font.font("System", FontWeight.BOLD, 36));
-			textFlow.getChildren().add(t);
-		}
+		Text t = new Text();
+		t.setText(texto);
+		t.setFill(color == 'R' ? Color.RED : Color.BLACK);
+		t.setFont(Font.font("System", FontWeight.BOLD, 36));
+		textFlow.getChildren().add(t);
 	}
 	
 	// Versión de PintaPalabra más simple de implementar pero genera un objeto Text
